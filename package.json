@@ -1,0 +1,33 @@
+{
+  "name": "airtraffic",
+  "version": "1.0.0",
+  "description": "all the airplanes that are flying over current location of user",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --mode development ./app/js/app.js --output ./public/main.js",
+    "build": "webpack --mode production ./app/js/app.js --output ./public/main.js",
+    "start": "webpack-dev-server --https --mode development ./app/js/app.js --output ./public/main.js --open ",
+    "watch": "webpack --watch --progress -hide-modules development ./app/js/app.js --output ./public/main.js "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samopaki/AirTraffic.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/samopaki/AirTraffic/issues"
+  },
+  "homepage": "https://github.com/samopaki/AirTraffic#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.0.6",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.10",
+    "webpack-dev-server": "^3.1.0"
+  }
+}
