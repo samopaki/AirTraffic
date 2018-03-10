@@ -82,54 +82,28 @@ export var geoLocation = function() {
 				orientation = "W";
 			}
 
-			var tr = document.createElement('TR'),
-				tdO = document.createElement('TD'),
-				tdA = document.createElement('TD'),
-				tdFN = document.createElement('TD'),
-				tdDetails = document.createElement('TD'),
-				imgOrie = createImg(orientation),
-				txtA = document.createTextNode(flight.Alt),
-				txtFN = document.createTextNode(flight.Icao),
-				detailsButton = createButton();
-				
-			tr.setAttribute("id", flight.Id);
-			getPlaneData(flight.Man, flight.Id); //getting plane data from https://clearbit.com/logo for logo image
-			tdO.appendChild(imgOrie);
-			tr.appendChild(tdO);
-			tdA.appendChild(txtA);
-			tr.appendChild(tdA);
-			tdFN.appendChild(txtFN);
-			tr.appendChild(tdFN);
-			tdDetails.appendChild(detailsButton);
-			tr.appendChild(tdDetails);
-			document.getElementById('data').appendChild(tr);
-			tr.dataset.mnf = flight.Man;
-			tr.dataset.mnfModel = flight.Mdl;
-			tr.dataset.flightTo = flight.To;
-			tr.dataset.flightFrom = flight.From;
-			
-		});
-	}
-	function createImg(orientation) {
-		var x = document.createElement("IMG");
-		x.setAttribute("src", "../app/img/Airplane-Left-Red-icon.png");
-		x.setAttribute("width", "100");
-		x.setAttribute("height", "100");
-		if(orientation === "E"){
-			x.setAttribute("alt", "Right");
-			x.setAttribute("class", "rotateImg");
-			document.body.appendChild(x);
-			return x;
-		}
-		x.setAttribute("alt", "Left");
-		return x;
-	}
+			var rowTpl = [
+				'<tr id="' + flight.Id + '',
+						'" data-mnf="' + flight.Man + '',
+						'" data-mnf-model="' + flight.Mdl + '',
+						'" data-flight-to="' + flight.To + '',
+						'" data-flight-from="' + flight.From + '">',
+					'<td>',
+						'<img src="../app/img/Airplane-Left-Red-icon.png" width="100" height="100" ',
+						'' + (orientation === "E" ? 'alt="Right" class="rotateImg"' : 'alt="Left" >') + '',
+					'</td>',
+					'<td>' + flight.Alt + '</td>',
+					'<td>' + flight.Icao + '</td>',
+					'<td>',
+						'<button>Open details</button>',
+					'</td>',
+				'</tr>'
+			].join('');
 
-	function createButton() {
-		var x = document.createElement("BUTTON");
-		var t = document.createTextNode("Open details");
-		x.appendChild(t);
-		return x;
+			document.getElementById('data').insertAdjacentHTML( 'beforeend', rowTpl );
+
+			getPlaneData(flight.Man, flight.Id); //getting plane data from https://clearbit.com/logo for logo image
+		});
 	}
 
 	function compare(a, b) {
@@ -156,6 +130,7 @@ export var geoLocation = function() {
 						setLogoData("logo not found", fId);
 						return false;
 					}
+
 					logoUrlTmp = logoUrlTmp[0].logo;
 					setLogoData(logoUrlTmp, fId);
 				}
