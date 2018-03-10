@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack --mode development ./app/js/app.js --output ./public/main.js",
     "build": "webpack --mode production ./app/js/app.js --output ./public/main.js",
-    "start": "webpack-dev-server --https --mode development ./app/js/app.js --output ./public/main.js --open ",
+    "start": "webpack-dev-server --https --mode development ./app/js/app.js --output ./public/main.js --open",
     "watch": "webpack --watch --progress -hide-modules development ./app/js/app.js --output ./public/main.js "
   },
   "repository": {

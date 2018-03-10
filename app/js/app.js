@@ -1,3 +1,2 @@
-import {geoLocation} from './airplanes' 
-
+import {geoLocation} from './airplanes'
 geoLocation();
