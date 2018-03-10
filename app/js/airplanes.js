@@ -41,10 +41,11 @@ export var geoLocation = function() {
 			so i have downloaded example of their response and i am using it as if i actualy got it from them
 		*/
 		var req = new XMLHttpRequest();
+
 		req.onreadystatechange = function() {
 			if (this.readyState == XMLHttpRequest.DONE) {
 				if (this.status == 200) {
-					document.getElementById("success").innerHTML = this.responseText;
+					// document.getElementById("success").innerHTML = this.responseText;
 
 					handleFlightData( JSON.parse(this.responseText) );
 				}
@@ -67,8 +68,83 @@ export var geoLocation = function() {
 		Main functionality start here
 	*/
 	function handleFlightData( response ){
-		debugger;
+		var flights = response.acList;
+		var ul=document.createElement('ul');
+
+		flights.sort(compare);
+		// window.lastResponse = flights;
+
+		flights.forEach( function( flight ){
+			// debugger;
+			var orientation;
+			var altitude = flight.Alt;
+			var fcn = flight.Icao;
+			var fId = flight.Id;
+			var manufacturer = flight.Man;
+			var manufacturerLogo = getPlaneLogo(manufacturer, fId);
+			var manufacturerModel = flight.Mdl;
+			var FlightTo = flight.To;
+			var FlightFrom = flight.From;
+			var li = document.createElement('li');
+			li.setAttribute("id", fId);
+
+			if( flight.Trak <= 180 ){
+				orientation = "E";
+			} else {
+				orientation = "W";
+			}
+
+			li.innerHTML="<a href=''>Orientation: "+ orientation +"Altitude : "+ altitude +" Flight code number: "+ fcn +"</a>";
+			ul.appendChild(li);
+			document.getElementById('success').appendChild(ul);
+			document.getElementById(fId).dataset.mnf = manufacturer;
+			document.getElementById(fId).dataset.mnfModel = manufacturerModel;
+			document.getElementById(fId).dataset.flightTo = FlightTo;
+			document.getElementById(fId).dataset.flightFrom = FlightFrom;
+			
+		});
 	}
 
+	function compare(a, b) {
+		if (a.Alt > b.Alt){
+			return -1;
+		}
+
+		if (a.Alt < b.Alt){
+			return 1;
+		}
+
+		return 0;
+	}
+
+	function getPlaneLogo (name, fId){
+		var req = new XMLHttpRequest();
+
+		req.onreadystatechange = function() {
+			if (this.readyState == XMLHttpRequest.DONE) {
+				if (this.status == 200) {
+					var logoUrlTmp =(JSON.parse(this.responseText));
+
+					if( logoUrlTmp[0] == undefined) {
+						setDataForPlaneLogo("logo not found", fId);
+						return false;
+					}
+					logoUrlTmp = logoUrlTmp[0].logo;
+					setDataForPlaneLogo(logoUrlTmp, fId);
+				}
+				else if (this.status == 400) {
+					alert('There was an error 400');
+				}
+				else {
+					alert('something else other than 200 was returned');
+				}
+			}
+		};
+		req.open("GET", "https://autocomplete.clearbit.com/v1/companies/suggest?query=:" + name + "", true);
+		req.send();
+	}
+	function setDataForPlaneLogo(manufLogo, fId){
+		document.getElementById(fId).dataset.logo = manufLogo;
+	}
 	getLocation();
 }
