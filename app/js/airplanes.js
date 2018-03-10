@@ -69,24 +69,12 @@ export var geoLocation = function() {
 	*/
 	function handleFlightData( response ){
 		var flights = response.acList;
-		var ul=document.createElement('ul');
 
 		flights.sort(compare);
 		// window.lastResponse = flights;
 
 		flights.forEach( function( flight ){
-			// debugger;
-			var orientation;
-			var altitude = flight.Alt;
-			var fcn = flight.Icao;
-			var fId = flight.Id;
-			var manufacturer = flight.Man;
-			var manufacturerLogo = getPlaneLogo(manufacturer, fId);
-			var manufacturerModel = flight.Mdl;
-			var FlightTo = flight.To;
-			var FlightFrom = flight.From;
-			var li = document.createElement('li');
-			li.setAttribute("id", fId);
+			var orientation = "";
 
 			if( flight.Trak <= 180 ){
 				orientation = "E";
@@ -94,15 +82,54 @@ export var geoLocation = function() {
 				orientation = "W";
 			}
 
-			li.innerHTML="<a href=''>Orientation: "+ orientation +"Altitude : "+ altitude +" Flight code number: "+ fcn +"</a>";
-			ul.appendChild(li);
-			document.getElementById('success').appendChild(ul);
-			document.getElementById(fId).dataset.mnf = manufacturer;
-			document.getElementById(fId).dataset.mnfModel = manufacturerModel;
-			document.getElementById(fId).dataset.flightTo = FlightTo;
-			document.getElementById(fId).dataset.flightFrom = FlightFrom;
+			var tr = document.createElement('TR'),
+				tdO = document.createElement('TD'),
+				tdA = document.createElement('TD'),
+				tdFN = document.createElement('TD'),
+				tdDetails = document.createElement('TD'),
+				imgOrie = createImg(orientation),
+				txtA = document.createTextNode(flight.Alt),
+				txtFN = document.createTextNode(flight.Icao),
+				detailsButton = createButton();
+				
+			tr.setAttribute("id", flight.Id);
+			getPlaneData(flight.Man, flight.Id); //getting plane data from https://clearbit.com/logo for logo image
+			tdO.appendChild(imgOrie);
+			tr.appendChild(tdO);
+			tdA.appendChild(txtA);
+			tr.appendChild(tdA);
+			tdFN.appendChild(txtFN);
+			tr.appendChild(tdFN);
+			tdDetails.appendChild(detailsButton);
+			tr.appendChild(tdDetails);
+			document.getElementById('data').appendChild(tr);
+			tr.dataset.mnf = flight.Man;
+			tr.dataset.mnfModel = flight.Mdl;
+			tr.dataset.flightTo = flight.To;
+			tr.dataset.flightFrom = flight.From;
 			
 		});
+	}
+	function createImg(orientation) {
+		var x = document.createElement("IMG");
+		x.setAttribute("src", "../app/img/Airplane-Left-Red-icon.png");
+		x.setAttribute("width", "100");
+		x.setAttribute("height", "100");
+		if(orientation === "E"){
+			x.setAttribute("alt", "Right");
+			x.setAttribute("class", "rotateImg");
+			document.body.appendChild(x);
+			return x;
+		}
+		x.setAttribute("alt", "Left");
+		return x;
+	}
+
+	function createButton() {
+		var x = document.createElement("BUTTON");
+		var t = document.createTextNode("Open details");
+		x.appendChild(t);
+		return x;
 	}
 
 	function compare(a, b) {
@@ -117,7 +144,7 @@ export var geoLocation = function() {
 		return 0;
 	}
 
-	function getPlaneLogo (name, fId){
+	function getPlaneData (name, fId){
 		var req = new XMLHttpRequest();
 
 		req.onreadystatechange = function() {
@@ -126,11 +153,11 @@ export var geoLocation = function() {
 					var logoUrlTmp =(JSON.parse(this.responseText));
 
 					if( logoUrlTmp[0] == undefined) {
-						setDataForPlaneLogo("logo not found", fId);
+						setLogoData("logo not found", fId);
 						return false;
 					}
 					logoUrlTmp = logoUrlTmp[0].logo;
-					setDataForPlaneLogo(logoUrlTmp, fId);
+					setLogoData(logoUrlTmp, fId);
 				}
 				else if (this.status == 400) {
 					alert('There was an error 400');
@@ -143,7 +170,7 @@ export var geoLocation = function() {
 		req.open("GET", "https://autocomplete.clearbit.com/v1/companies/suggest?query=:" + name + "", true);
 		req.send();
 	}
-	function setDataForPlaneLogo(manufLogo, fId){
+	function setLogoData(manufLogo, fId){
 		document.getElementById(fId).dataset.logo = manufLogo;
 	}
 	getLocation();
