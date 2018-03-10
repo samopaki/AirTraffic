@@ -5,20 +5,38 @@
 </head>
 <body>
 
-<h1 id="error"></h1>
-<table>
-  <caption>Airplanes ower you</caption>
-  <thead>
-    <tr>
-      <th scope="col">Flight Oriented</th>
-      <th scope="col">Altitude</th>
-      <th scope="col">Model</th>
-      <th scope="col">Details</th>
-    </tr>
-  </thead>
-  <tbody id="data">
-  </tbody>
-</table>
+	<h1 id="error"></h1>
+	<table>
+	  <caption>Airplanes above you</caption>
+	  <thead>
+		<tr>
+		  <th scope="col">Flight Oriented</th>
+		  <th scope="col">Altitude</th>
+		  <th scope="col">Model</th>
+		  <th scope="col">Details</th>
+		</tr>
+	  </thead>
+	  <tbody id="data">
+	  </tbody>
+	</table>
+	<div class="modal-wrap hidden" id="modal-demo">
+	  <div class="modal-container">
+		<div class="modal-header">
+		  <h2 class="modal-title">Details</h2>
+		  <button class="close-modal">&times;</button>
+		</div>
+		<div class="modal-content">
+		  <img id="logo" alt="Logo not found">
+		  <p>Airplane Manufacturer: <span id="mnf"></span></p> 
+		  <p>Model: <span id="model"></span></p> 
+		  <p>Destination: <span id="to"></span></p> 
+		  <p>Flight Origin airport: <span id="Flightfrom"></span></p> 
+		</div>
+		<div class="modal-footer">
+		  <p>by samopaki</p>
+		</div>
+	  </div>
+	</div>
 
 </body>
 </html>

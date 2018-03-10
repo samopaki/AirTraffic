@@ -1,3 +1,4 @@
+import {loadModal} from './modal'
 export var geoLocation = function() {
 	var message = document.getElementById("error");
 
@@ -48,6 +49,7 @@ export var geoLocation = function() {
 					// document.getElementById("success").innerHTML = this.responseText;
 
 					handleFlightData( JSON.parse(this.responseText) );
+					loadModal();
 				}
 				else if (this.status == 400) {
 					alert('There was an error 400');
@@ -74,7 +76,8 @@ export var geoLocation = function() {
 		// window.lastResponse = flights;
 
 		flights.forEach( function( flight ){
-			var orientation = "";
+			var orientation = "",
+				noInfo = "No information in database";
 
 			if( flight.Trak <= 180 ){
 				orientation = "E";
@@ -84,10 +87,10 @@ export var geoLocation = function() {
 
 			var rowTpl = [
 				'<tr id="' + flight.Id + '',
-						'" data-mnf="' + flight.Man + '',
-						'" data-mnf-model="' + flight.Mdl + '',
-						'" data-flight-to="' + flight.To + '',
-						'" data-flight-from="' + flight.From + '">',
+						'" data-mnf="' + (flight.Man == undefined ? noInfo : flight.Man) + '',
+						'" data-mnf-model="' + (flight.Mdl == undefined ? noInfo : flight.Mdl) + '',
+						'" data-flight-to="' + (flight.To == undefined ? noInfo : flight.To) + '',
+						'" data-flight-from="' + (flight.From == undefined ? noInfo : flight.From) + '">',
 					'<td>',
 						'<img src="../app/img/Airplane-Left-Red-icon.png" width="100" height="100" ',
 						'' + (orientation === "E" ? 'alt="Right" class="rotateImg"' : 'alt="Left" >') + '',
@@ -95,7 +98,7 @@ export var geoLocation = function() {
 					'<td>' + flight.Alt + '</td>',
 					'<td>' + flight.Icao + '</td>',
 					'<td>',
-						'<button>Open details</button>',
+						'<button class="open-modal" class="triger-modal" data-triger="modal-demo">Open details</button>',
 					'</td>',
 				'</tr>'
 			].join('');
@@ -127,7 +130,7 @@ export var geoLocation = function() {
 					var logoUrlTmp =(JSON.parse(this.responseText));
 
 					if( logoUrlTmp[0] == undefined) {
-						setLogoData("logo not found", fId);
+						setLogoData("", fId);
 						return false;
 					}
 
