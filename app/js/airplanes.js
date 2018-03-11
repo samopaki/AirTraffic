@@ -1,6 +1,7 @@
 import {loadModal} from './modal'
 export var startApp = function() {
-	var message = document.getElementById("error");
+	var message = document.getElementById("error"),
+		content = document.getElementById('content');
 
 	function getLocation() {
 		if (navigator.geolocation) {
@@ -16,6 +17,8 @@ export var startApp = function() {
 			longitude: position.coords.longitude
 		};
 
+		message.classList.add("hidden");
+
 		getFlightsData( coords );
 
 		setInterval( function(){
@@ -24,20 +27,7 @@ export var startApp = function() {
 	}
 
 	function handleGeoLocationError(error) {
-		switch(error.code) {
-			case error.PERMISSION_DENIED:
-				message.innerHTML = "User denied the request for Geolocation."
-				break;
-			case error.POSITION_UNAVAILABLE:
-				message.innerHTML = "Location information is unavailable."
-				break;
-			case error.TIMEOUT:
-				message.innerHTML = "The request to get user location timed out."
-				break;
-			case error.UNKNOWN_ERROR:
-				message.innerHTML = "An unknown error occurred."
-				break;
-		}
+		content.classList.add("hidden");
 	}
 
 	function getFlightsData(coordinates) {
@@ -178,6 +168,7 @@ export var startApp = function() {
 
 		if(isLast){
 			checkHash();
+			content.classList.remove("hidden");
 		}
 	}
 	getLocation();
