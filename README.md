@@ -1,11 +1,11 @@
 # AirTraffic
-> All the airplanes that are flying over current location of user
+ All the airplanes that are flying over current location of user
 
 >Warning: Make sure you're using the latest version of Node.js and NPM
 
 ### Quick start
 
-> Clone/Download the repo then edit `app.js` inside [`/src/app/app.js`](/src/app/app.js)
+> Clone/Download the repo then edit `app.js` inside [`/src/app/app.js`](/app/js/app.js)
 
 ```bash
 # clone our repo
