@@ -1,3 +1,3 @@
-import {geoLocation} from './airplanes'
+import {startApp} from './airplanes'
 import './../css/app.css'
-geoLocation();
+startApp();

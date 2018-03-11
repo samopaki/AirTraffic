@@ -27,8 +27,11 @@ export function loadModal(){
 		modelEl.innerHTML = model;
 		toEl.innerHTML = to;
 		FlightfromEl.innerHTML = Flightfrom;
-		modal.classList.toggle('visible');
-		modal.classList.toggle('hidden');
+		modal.classList.add('visible');
+		modal.classList.remove('hidden');
+
+		window.location.hash = "#" + data.getAttribute('id') + "";
+		// history.pushState({}, "", hash);
 	};
 
 	// Open modal event listener
@@ -39,6 +42,7 @@ export function loadModal(){
 	// Close modal event listener
 	closeModal.addEventListener('click', function(){
 		modal.classList.remove('visible');
-		modal.classList.toggle('hidden');
+		modal.classList.add('hidden');
+		window.location.hash = "#";
 	});
 }

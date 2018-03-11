@@ -1,5 +1,5 @@
 import {loadModal} from './modal'
-export var geoLocation = function() {
+export var startApp = function() {
 	var message = document.getElementById("error");
 
 	function getLocation() {
@@ -17,6 +17,10 @@ export var geoLocation = function() {
 		};
 
 		getFlightsData( coords );
+
+		setInterval( function(){
+			getFlightsData( coords )
+		}, 20000);
 	}
 
 	function handleGeoLocationError(error) {
@@ -70,12 +74,16 @@ export var geoLocation = function() {
 		Main functionality start here
 	*/
 	function handleFlightData( response ){
-		var flights = response.acList;
+		var flights = response.acList,
+			numberOfFlights = flights.length,
+			isLast = false;
+
+		document.getElementById('data').innerHTML = "";
 
 		flights.sort(compare);
 		// window.lastResponse = flights;
 
-		flights.forEach( function( flight ){
+		flights.forEach( function( flight, index ){
 			var orientation = "",
 				noInfo = "No information in database";
 
@@ -105,8 +113,25 @@ export var geoLocation = function() {
 
 			document.getElementById('data').insertAdjacentHTML( 'beforeend', rowTpl );
 
-			getPlaneData(flight.Man, flight.Id); //getting plane data from https://clearbit.com/logo for logo image
+			if( numberOfFlights === index+1 ){
+				isLast = true;
+			}
+
+			getPlaneData(flight.Man, flight.Id, isLast); //getting plane data from https://clearbit.com/logo for logo image
 		});
+	}
+
+	function checkHash(){
+		var hash = window.location.hash.substr(1);
+
+		if(hash != ''){
+			var isThere = document.getElementById(''+hash+'');
+
+			if(isThere){
+				var detailsBtn = isThere.querySelector('button');
+				detailsBtn.click();
+			}
+		}
 	}
 
 	function compare(a, b) {
@@ -121,7 +146,7 @@ export var geoLocation = function() {
 		return 0;
 	}
 
-	function getPlaneData (name, fId){
+	function getPlaneData (name, fId, isLast){
 		var req = new XMLHttpRequest();
 
 		req.onreadystatechange = function() {
@@ -135,7 +160,7 @@ export var geoLocation = function() {
 					}
 
 					logoUrlTmp = logoUrlTmp[0].logo;
-					setLogoData(logoUrlTmp, fId);
+					setLogoData(logoUrlTmp, fId, isLast);
 				}
 				else if (this.status == 400) {
 					alert('There was an error 400');
@@ -148,8 +173,13 @@ export var geoLocation = function() {
 		req.open("GET", "https://autocomplete.clearbit.com/v1/companies/suggest?query=:" + name + "", true);
 		req.send();
 	}
-	function setLogoData(manufLogo, fId){
+	function setLogoData(manufLogo, fId, isLast){
 		document.getElementById(fId).dataset.logo = manufLogo;
+
+		if(isLast){
+			checkHash();
+		}
 	}
 	getLocation();
 }
+
