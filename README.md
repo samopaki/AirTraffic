@@ -5,14 +5,12 @@
 
 ### Quick start
 
-> Clone/Download the repo then edit `app.js` inside [`/src/app/app.js`](/app/js/app.js)
-
 ```bash
-# clone our repo
-$ git clone https://github.com/samopaki/AirTraffic.git my-app
+# clone repo
+$ git clone https://github.com/samopaki/AirTraffic.git
 
-# change directory to your app
-$ cd my-app
+# change directory AirTraffic
+$ cd AirTraffic
 
 # install the dependencies with npm
 $ npm install
@@ -51,6 +49,8 @@ After you have installed all dependencies you can now run the app with:
 ```bash
 npm run start
 ```
+
+**Note:** Please be aware that geolocation requires website to be acceessed over HTTPS
 
 It will start a local server using `webpack-dev-server` which will watch, build (in-memory), and reload for you. The port will be displayed to you as `http://localhost:8080`.
 

@@ -23,7 +23,7 @@ export var startApp = function() {
 
 		setInterval( function(){
 			getFlightsData( coords )
-		}, 20000);
+		}, 60000);
 	}
 
 	function handleGeoLocationError(error) {
